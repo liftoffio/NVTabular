@@ -146,9 +146,9 @@ def make_feature_column_workflow(feature_columns, label_name, category_dir=None)
             # boundaries and embedding dim so that we can wrap
             # with either indicator or embedding later
             if key in [col.key for col in numeric_columns]:
-                buckets[key] = (column.boundaries, embedding_dim)
+                buckets[key] = (cat_column.boundaries, embedding_dim)
             else:
-                replaced_buckets[key] = (column.boundaries, embedding_dim)
+                replaced_buckets[key] = (cat_column.boundaries, embedding_dim)
 
             # put off dealing with these until the end so that
             # we know whether we need to replace numeric
