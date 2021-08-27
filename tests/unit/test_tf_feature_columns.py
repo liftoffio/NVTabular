@@ -31,6 +31,9 @@ def test_feature_column_utils():
             ),
             32,
         ),
+        tf.feature_column.indicator_column(
+            tf.feature_column.categorical_column_with_identity("vocab_3", 10),
+        ),
     ]
 
     workflow, _ = nvtf.make_feature_column_workflow(cols, "target")
@@ -40,4 +43,5 @@ def test_feature_column_utils():
         "bucketized_2",
         "vocab_1",
         "vocab_2",
+        "vocab_3",
     ]

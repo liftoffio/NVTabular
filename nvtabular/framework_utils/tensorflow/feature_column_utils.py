@@ -103,6 +103,7 @@ def make_feature_column_workflow(feature_columns, label_name, category_dir=None)
 
     _CATEGORIFY_COLUMNS = (fc.VocabularyListCategoricalColumn, fc.VocabularyFileCategoricalColumn)
     categorifies, hashes, crosses, buckets, replaced_buckets = {}, {}, {}, {}, {}
+    identities = []
 
     numeric_columns = []
     new_feature_columns = []
@@ -191,6 +192,7 @@ def make_feature_column_workflow(feature_columns, label_name, category_dir=None)
 
         elif isinstance(cat_column, fc.IdentityCategoricalColumn):
             new_feature_columns.append(column)
+            identities.append(cat_column)
             continue
 
         else:
@@ -279,6 +281,9 @@ def make_feature_column_workflow(feature_columns, label_name, category_dir=None)
 
     if numeric_columns:
         features += [col.key for col in numeric_columns]
+
+    if identities:
+        features += [col.key for col in identities]
 
     workflow = nvt.Workflow(features)
 
