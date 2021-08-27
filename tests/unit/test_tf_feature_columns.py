@@ -6,6 +6,19 @@ nvtf = pytest.importorskip("nvtabular.framework_utils.tensorflow")
 
 def test_feature_column_utils():
     cols = [
+        tf.feature_column.bucketized_column(
+            tf.feature_column.numeric_column(
+                "bucketized_1",
+            ),
+            [0, 10, 100],
+        ),
+        tf.feature_column.embedding_column(
+            tf.feature_column.bucketized_column(
+                tf.feature_column.numeric_column("bucketized_2"),
+                [0, 100, 500],
+            ),
+            64,
+        ),
         tf.feature_column.embedding_column(
             tf.feature_column.categorical_column_with_vocabulary_list(
                 "vocab_1", ["a", "b", "c", "d"]
@@ -21,4 +34,10 @@ def test_feature_column_utils():
     ]
 
     workflow, _ = nvtf.make_feature_column_workflow(cols, "target")
-    assert workflow.column_group.columns == ["target", "vocab_1", "vocab_2"]
+    assert workflow.column_group.columns == [
+        "target",
+        "bucketized_1",
+        "bucketized_2",
+        "vocab_1",
+        "vocab_2",
+    ]
