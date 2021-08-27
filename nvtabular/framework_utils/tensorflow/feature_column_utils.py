@@ -226,7 +226,8 @@ def make_feature_column_workflow(feature_columns, label_name, category_dir=None)
         features += features_replaced_buckets
 
     if len(categorifies) > 0:
-        features += categorifies.keys() >> Categorify(vocabs=pd.DataFrame(categorifies))
+        vocabs = {column: pd.Series(vocab) for column, vocab in categorifies.items()}
+        features += categorifies.keys() >> Categorify(vocabs=vocabs)
 
     if len(hashes) > 0:
         features += hashes.keys() >> HashBucket(hashes)
